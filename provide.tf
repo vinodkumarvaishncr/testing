@@ -7,7 +7,7 @@ terraform {
   }
   //for use backend block
   backend {}
-
+  raaa{}
 
 }
 
