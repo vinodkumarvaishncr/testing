@@ -8,6 +8,7 @@ terraform {
   //for use backend block
   backend {}
  abcd {}
+  raaa{}
 
 }
 
