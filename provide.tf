@@ -9,7 +9,7 @@ terraform {
   backend {}
  abcd {}
   raaa{}
-
+  hotfix {}
 }
 
 # Configure the Microsoft Azure Provider
