@@ -10,6 +10,8 @@ terraform {
  abcd {}
   raaa{}
   hotfix {}
+  vinod {}
+
 }
 
 # Configure the Microsoft Azure Provider
