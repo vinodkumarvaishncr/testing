@@ -6,10 +6,15 @@ terraform {
     }
   }
   //for use backend block
-  backend {}
+  
  abcd {}
   raaa{}
-
+   backend "azurerm" {
+    resource_group_name   = "pan-rg-main"
+    storage_account_name  = "pankajstrgmain"
+    container_name        = "tfstate"
+    key                   = "terraform.webapp.tfstate"
+  }
 }
 
 # Configure the Microsoft Azure Provider
