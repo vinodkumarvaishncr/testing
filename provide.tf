@@ -1,22 +1,17 @@
 terraform {
   required_providers {
     azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=3.0.0"
+      source = "hashicorp/azurerm"
+      version = "4.38.1"
     }
   }
-  //for use backend block
-  backend {}
- abcd {}
-  raaa{}
-  hotfix {}
-  vinod {}
+ 
 
 }
 
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
-  subscription_id = "0fb3b41d-23bc-47d2-861e-1582e1789bd5"
+  subscription_id = "4666927b-089e-4cfc-8592-146c2e04657e"
   features {}
   
 }
