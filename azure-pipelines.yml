@@ -1,5 +1,5 @@
 trigger:
-  - none  # Manual trigger only
+  - none
 
 pool: "lucknow_agent2"
 
@@ -40,7 +40,7 @@ stages:
         steps:
           - task: TerraformInstaller@1
             inputs:
-              terraformVersion: 'latest'
+              terraformVersion: '1.5.7'
 
           - task: TerraformTask@5
             inputs:
@@ -58,7 +58,7 @@ stages:
         steps:
           - task: TerraformInstaller@1
             inputs:
-              terraformVersion: 'latest'
+              terraformVersion: '1.5.7'
 
           - task: TerraformTask@5
             inputs:
