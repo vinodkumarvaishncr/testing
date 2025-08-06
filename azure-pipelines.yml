@@ -1,54 +1,69 @@
 trigger:
-- main   # jab 'main' branch pe push ho
+  - none  # Manual trigger only
 
-pool:
-  vmImage: 'ubuntu-latest'  # hosted agent use kar rahe hain
+pool: "lucknow_agent2"
+
+variables:
+  sys_path: '$(System.DefaultWorkingDirectory)/pra1'
 
 stages:
-# ---------- Build Stage ----------
-- stage: Build
-  displayName: 'Build Stage'
-  jobs:
-    - job: BuildJob
-      displayName: 'Build Job'
-      steps:
-        - task: UseNode@1
-          inputs:
-            version: '18.x'
+  - stage: Init_Validate
+    displayName: 'Terraform Init & Validate'
+    jobs:
+      - job: TerraformInitValidate
+        steps:
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
 
-        - script: |
-            echo "Installing dependencies..."
-            npm install
-          displayName: 'Install Dependencies'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: $(sys_path)
+              backendServiceArm: 'vinod-app-azure-lucknow'
+              backendAzureRmStorageAccountName: 'robinb17storage'
+              backendAzureRmContainerName: 'mycontainer'
+              backendAzureRmKey: 'vinodkey'
 
-        - script: |
-            echo "Building the app..."
-            npm run build
-          displayName: 'Build Application'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+              workingDirectory: $(sys_path)
 
-# ---------- Test Stage ----------
-- stage: Test
-  displayName: 'Test Stage'
-  dependsOn: Build
-  jobs:
-    - job: TestJob
-      displayName: 'Run Unit Tests'
-      steps:
-        - script: |
-            echo "Running tests..."
-            npm test
-          displayName: 'Run Tests'
+  - stage: Plan
+    displayName: 'Terraform Plan'
+    dependsOn: Init_Validate
+    jobs:
+      - job: TerraformPlan
+        steps:
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
 
-# ---------- Deploy Stage ----------
-- stage: Deploy
-  displayName: 'Deploy Stage'
-  dependsOn: Test
-  condition: succeeded()
-  jobs:
-    - job: DeployJob
-      displayName: 'Deploy to Dev Environment'
-      steps:
-        - script: |
-            echo "Deploying to dev environment..."
-            # yahan aap Azure CLI ya kubectl ya Terraform etc use kar sakte ho
-          displayName: 'Deployment Step'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: $(sys_path)
+              environmentServiceNameAzureRM: 'vinod-app-azure-lucknow'
+
+  - stage: Apply
+    displayName: 'Terraform Apply'
+    dependsOn: Plan
+    condition: succeeded()
+    jobs:
+      - job: TerraformApply
+        steps:
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
+
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: $(sys_path)
+              commandOptions: '-auto-approve'
+              environmentServiceNameAzureRM: 'vinod-app-azure-lucknow'
