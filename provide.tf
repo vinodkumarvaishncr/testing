@@ -9,7 +9,7 @@ terraform {
       resource_group_name  = "robinson"
       storage_account_name = "robinb17storage"
       container_name       = "mycontainer"
-      key                  = "vinodkey.tfstate"
+      key                  = "vinodkey"
   }
 
 }
