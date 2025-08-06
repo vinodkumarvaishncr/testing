@@ -11,6 +11,7 @@ stages:
     - job: BuildJob
       displayName: 'Build Job'
       steps:
+        - checkout: self  # This ensures the code is checked out to the agent
         - task: UseNode@1
           inputs:
             version: '18.x'
