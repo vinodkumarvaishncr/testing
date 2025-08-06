@@ -5,7 +5,12 @@ terraform {
       version = "4.38.1"
     }
   }
- 
+ backend "azurerm" {
+      resource_group_name  = "robinson"
+      storage_account_name = "robinb17storage"
+      container_name       = "mycontainer"
+      key                  = "vinodkey.tfstate"
+  }
 
 }
 
