@@ -1,0 +1,54 @@
+trigger:
+- main   # jab 'main' branch pe push ho
+
+pool:
+  vmImage: 'ubuntu-latest'  # hosted agent use kar rahe hain
+
+stages:
+# ---------- Build Stage ----------
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+    - job: BuildJob
+      displayName: 'Build Job'
+      steps:
+        - task: UseNode@1
+          inputs:
+            version: '18.x'
+
+        - script: |
+            echo "Installing dependencies..."
+            npm install
+          displayName: 'Install Dependencies'
+
+        - script: |
+            echo "Building the app..."
+            npm run build
+          displayName: 'Build Application'
+
+# ---------- Test Stage ----------
+- stage: Test
+  displayName: 'Test Stage'
+  dependsOn: Build
+  jobs:
+    - job: TestJob
+      displayName: 'Run Unit Tests'
+      steps:
+        - script: |
+            echo "Running tests..."
+            npm test
+          displayName: 'Run Tests'
+
+# ---------- Deploy Stage ----------
+- stage: Deploy
+  displayName: 'Deploy Stage'
+  dependsOn: Test
+  condition: succeeded()
+  jobs:
+    - job: DeployJob
+      displayName: 'Deploy to Dev Environment'
+      steps:
+        - script: |
+            echo "Deploying to dev environment..."
+            # yahan aap Azure CLI ya kubectl ya Terraform etc use kar sakte ho
+          displayName: 'Deployment Step'
