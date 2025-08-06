@@ -4,7 +4,7 @@ trigger:
 pool: "lucknow_agent2"
 
 variables:
-  sys_path: '$(System.DefaultWorkingDirectory)/pra1'
+  sys_path: '$(System.DefaultWorkingDirectory)'
 
 stages:
   - stage: Init_Validate
@@ -14,7 +14,7 @@ stages:
         steps:
           - task: TerraformInstaller@1
             inputs:
-              terraformVersion: '1.5.7'
+              terraformVersion: 'latest'
 
           - task: TerraformTask@5
             inputs:
@@ -40,7 +40,7 @@ stages:
         steps:
           - task: TerraformInstaller@1
             inputs:
-              terraformVersion: '1.5.7'
+              terraformVersion: 'latest'
 
           - task: TerraformTask@5
             inputs:
@@ -58,7 +58,7 @@ stages:
         steps:
           - task: TerraformInstaller@1
             inputs:
-              terraformVersion: '1.5.7'
+              terraformVersion: 'latest'
 
           - task: TerraformTask@5
             inputs:
