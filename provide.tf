@@ -5,6 +5,7 @@ terraform {
       version = "4.38.1"
     }
   }
+ required_version = ">= 1.3.0"
  backend "azurerm" {
       resource_group_name  = "robinson"
       storage_account_name = "robinb17storage"
