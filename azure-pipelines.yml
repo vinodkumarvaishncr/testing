@@ -17,8 +17,6 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        backendAzureRmUseEntraIdForAuthentication: false
-        backendAzureRmUseCliFlagsForAuthentication: true
         backendServiceArm: 'vinod-app-azure-lucknow'
         backendAzureRmStorageAccountName: 'robinb17storage'
         backendAzureRmContainerName: 'mycontainer'
