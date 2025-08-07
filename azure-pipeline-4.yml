@@ -1,11 +1,11 @@
 trigger: none
 
 pool:
-  vmImage: ubuntu-latest
+  name: "lucknow_agent2"
 
 variables:
   svc: 'my-webapp-connect'
-  config-path: '$(System.DefaultWorkingDirectory)/driver'
+  config-path: '$(System.DefaultWorkingDirectory)'
 
 parameters:
   - name: init
@@ -47,44 +47,35 @@ steps:
     terraformVersion: 'latest'
 
 # task 2: terraform init
-- task: TerraformTaskV5
+- task: TerraformTask@5
   displayName: 'Terraform init kar do'
   inputs:
     provider: 'azurerm'
     command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/driver'
-    backendServiceArm: '$(svc)'
-    backendAzureRmStorageAccountName: 'achintastg007'
-    backendAzureRmContainerName: 'my-terra'
-    backendAzureRmKey: '${{parameters.environment}}.tfstate'
-
-# task 3: terraform validate
-- task: TerraformTaskV5
+    backendServiceArm: 'vinod-app-azure-lucknow'
+    backendAzureRmStorageAccountName: 'robinb17storage'
+    backendAzureRmContainerName: 'mycontainer'
+    backendAzureRmKey: 'vinodkey'
+ 
+- task: TerraformTask@5
   displayName: 'Terraform project ko validate ka rahe hain'
-  condition: '${{parameters.validate}}'
   inputs:
     provider: 'azurerm'
     command: 'validate'
-    workingDirectory: '$(config-path)'
 
-# task 4: terraform plan
-- task: TerraformTaskV5
-  displayName: 'Terraform plan ho raha h'
-  condition: '${{parameters.plan}}'
+- task: TerraformTask@5
+  displayName: 'Terraform ko plan mar dia'
   inputs:
     provider: 'azurerm'
     command: 'plan'
-    workingDirectory: '$(config-path)'
-    commandOptions: '-var-file=$(config-path)/${{parameters.environment}}.tfvars'
-    environmentServiceNameAzureRM: '$(svc)'
+    environmentServiceNameAzureRM: 'vinod-app-azure-lucknow'
 
-# task 5: terraform apply
-- task: TerraformTaskV5
+- task: TerraformTask@5
   displayName: 'Terraform ko apply mar dia'
-  condition: '${{parameters.apply}}'
   inputs:
     provider: 'azurerm'
     command: 'apply'
-    workingDirectory: '$(config-path)'
-    commandOptions: '-var-file=$(config-path)/${{parameters.environment}}.tfvars'
-    environmentServiceNameAzureRM: '$(svc)'
+    commandOptions: '-auto-approve'
+    environmentServiceNameAzureRM: 'vinod-app-azure-lucknow'
+
+ 
