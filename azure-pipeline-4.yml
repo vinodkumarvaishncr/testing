@@ -55,7 +55,7 @@ steps:
     backendServiceArm: 'vinod-app-azure-lucknow'
     backendAzureRmStorageAccountName: 'robinb17storage'
     backendAzureRmContainerName: 'mycontainer'
-    backendAzureRmKey: 'vinodkey'
+    backendAzureRmKey: 'myterraform.tfstate'
  
 - task: TerraformTask@5
   displayName: 'Terraform project ko validate ka rahe hain'
