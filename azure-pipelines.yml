@@ -20,8 +20,8 @@ stages:
         commandOptions: '-backend-config=use_azuread_auth=true'
         backendAzureRmUseCliFlagsForAuthentication: true
         backendServiceArm: 'vinod-app-azure-lucknow'
-        backendAzureRmStorageAccountName: 'anjalistorage123'
-        backendAzureRmContainerName: 'anjali-con'
+        backendAzureRmStorageAccountName: 'robinb17storage'
+        backendAzureRmContainerName: 'mycontainer'
         backendAzureRmKey: 'vinodkey.tfstate'
     
     - task: TerraformTask@5
