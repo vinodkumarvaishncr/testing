@@ -2,7 +2,7 @@ trigger:
   - none
 
 pool: 
-  name: "lucknow_agent2"
+  name: "lucknow_agent5"
  
 
 stages:
