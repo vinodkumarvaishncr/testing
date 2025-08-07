@@ -19,7 +19,6 @@ stages:
         command: 'init'
         backendAzureRmUseEntraIdForAuthentication: false
         backendServiceArm: 'vinod-app-azure-lucknow'
-        backendAzureRmOverrideSubscriptionID: '4666927b-089e-4cfc-8592-146c2e04657e'
         backendAzureRmStorageAccountName: 'robinb17storage'
         backendAzureRmContainerName: 'mycontainer'
         backendAzureRmKey: 'vinodkey.tfstate'
