@@ -20,7 +20,7 @@ stages:
         backendServiceArm: 'vinod-app-azure-lucknow'
         backendAzureRmStorageAccountName: 'robinb17storage'
         backendAzureRmContainerName: 'mycontainer'
-        backendAzureRmKey: 'vinodkey'
+        backendAzureRmKey: 'myterraform.tfstate'
     
     - task: TerraformTask@5
       inputs:
