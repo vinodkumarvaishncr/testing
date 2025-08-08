@@ -2,10 +2,10 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "~> 4.38.0"
+      version = "~> 4.99"
     }
   }
- required_version = ">= 1.3.0"
+ required_version = ">= 1.3.0, < 2.0.0"
  backend "azurerm" {
       resource_group_name  = "robinson"
       storage_account_name = "robinb17storage"
