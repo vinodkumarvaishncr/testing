@@ -7,8 +7,8 @@ terraform {
   }
  
  backend "azurerm" {
-      resource_group_name  = "robinson"
-      storage_account_name = "robinb17storage"
+      resource_group_name  = "vinod_main_rg"
+      storage_account_name = "vinodstorageaccountmain"
       container_name       = "mycontainer"
       key                  = "vinodkey.tfstate"
   }
