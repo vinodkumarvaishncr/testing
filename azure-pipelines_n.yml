@@ -2,8 +2,23 @@ trigger:
   - none
 
 parameters:
-  - name: proceed
-    displayName: 'Do you want to run Terraform tasks (init, plan, apply)?'
+  - name: run_init
+    displayName: 'Run Terraform init?'
+    type: boolean
+    default: false
+
+  - name: run_validate
+    displayName: 'Run Terraform validate?'
+    type: boolean
+    default: false
+
+  - name: run_plan
+    displayName: 'Run Terraform plan?'
+    type: boolean
+    default: false
+
+  - name: run_apply
+    displayName: 'Run Terraform apply?'
     type: boolean
     default: false
 
@@ -16,13 +31,12 @@ variables:      # pipeline-level
 
 steps:
 - task: TerraformInstaller@1
-  condition: eq('${{ parameters.proceed }}', true)
   inputs:
     terraformVersion: 'latest'
 
 - task: TerraformTask@5
   displayName: "init"
-  condition: eq('${{ parameters.proceed }}', true)
+  condition: eq('${{ parameters.run_init }}', true)
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -35,7 +49,7 @@ steps:
 
 - task: TerraformTask@5
   displayName: "validate"
-  condition: eq('${{ parameters.proceed }}', true)
+  condition: eq('${{ parameters.run_validate }}', true)
   inputs:
     provider: 'azurerm'
     command: 'validate'
@@ -43,7 +57,7 @@ steps:
 
 - task: TerraformTask@5
   displayName: "plan"
-  condition: eq('${{ parameters.proceed }}', true)
+  condition: eq('${{ parameters.run_plan }}', true)
   inputs:
     provider: 'azurerm'
     command: 'plan'
@@ -52,7 +66,7 @@ steps:
 
 - task: TerraformTask@5
   displayName: "apply"
-  condition: eq('${{ parameters.proceed }}', true)
+  condition: eq('${{ parameters.run_apply }}', true)
   inputs:
     provider: 'azurerm'
     command: 'apply'
