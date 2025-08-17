@@ -10,6 +10,7 @@ steps:
     terraformVersion: 'latest'
 
 - task: TerraformTask@5
+  displayName: "init"
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -21,12 +22,14 @@ steps:
     backendAzureRmKey: 'vinodkey.tfstate'
 
 - task: TerraformTask@5
+  displayName: "validate"
   inputs:
     provider: 'azurerm'
     command: 'validate'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
 
 - task: TerraformTask@5
+  displayName: "plan"
   inputs:
     provider: 'azurerm'
     command: 'plan'
@@ -34,6 +37,7 @@ steps:
     environmentServiceNameAzureRM: 'connection_new'
 
 - task: TerraformTask@5
+  displayName: "apply"
   inputs:
     provider: 'azurerm'
     command: 'apply'
