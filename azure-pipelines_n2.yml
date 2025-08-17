@@ -22,54 +22,76 @@ parameters:
     type: boolean
     default: false
 
-pool: 
-  name: "agent5"
-
-variables:      # pipeline-level
+variables:
   MY_VAR_PATH: '$(System.DefaultWorkingDirectory)/infra'
-  
 
-steps:
-- task: TerraformInstaller@1
-  inputs:
-    terraformVersion: 'latest'
-
-- task: TerraformTask@5
-  displayName: "init"
-  condition: eq('${{ parameters.run_init }}', true)
-  inputs:
-    provider: 'azurerm'
-    command: 'init'
-    workingDirectory: $(MY_VAR_PATH)
-    commandOptions: '-upgrade'
-    backendServiceArm: 'connection_new'
-    backendAzureRmStorageAccountName: 'vinodmainstorage'
-    backendAzureRmContainerName: 'vinodconatiner'
-    backendAzureRmKey: 'vinodkey.tfstate'
-
-- task: TerraformTask@5
-  displayName: "validate"
-  condition: eq('${{ parameters.run_validate }}', true)
-  inputs:
-    provider: 'azurerm'
-    command: 'validate'
-    workingDirectory: $(MY_VAR_PATH)
-
-- task: TerraformTask@5
-  displayName: "plan"
-  condition: eq('${{ parameters.run_plan }}', true)
-  inputs:
-    provider: 'azurerm'
-    command: 'plan'
-    workingDirectory: $(MY_VAR_PATH)
-    environmentServiceNameAzureRM: 'connection_new'
-
-- task: TerraformTask@5
-  displayName: "apply"
+# Step 1: Optional manual confirmation before apply (server-side job)
+jobs:
+- job: confirm_apply
+  displayName: 'Confirm Terraform Apply'
   condition: eq('${{ parameters.run_apply }}', true)
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    workingDirectory: $(MY_VAR_PATH)
-    commandOptions: '-auto-approve'
-    environmentServiceNameAzureRM: 'connection_new'
+  pool: server
+  steps:
+    - task: ManualValidation@0
+      inputs:
+        instructions: 'You selected Terraform apply. Please confirm to proceed.'
+        onTimeout: 'reject'
+
+# Step 2: Terraform steps job, depends on confirmation if apply selected
+- job: terraform_tasks
+  displayName: 'Terraform Tasks'
+  dependsOn: 
+    - ${{ if eq(parameters.run_apply, true) }}:
+        - confirm_apply
+  condition: |
+    or(
+      and(eq('${{ parameters.run_apply }}', true), succeeded('confirm_apply')),
+      eq('${{ parameters.run_apply }}', false)
+    )
+  pool:
+    name: "agent5"
+
+  steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+
+    - task: TerraformTask@5
+      displayName: "init"
+      condition: eq('${{ parameters.run_init }}', true)
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: $(MY_VAR_PATH)
+        commandOptions: '-upgrade'
+        backendServiceArm: 'connection_new'
+        backendAzureRmStorageAccountName: 'vinodmainstorage'
+        backendAzureRmContainerName: 'vinodconatiner'
+        backendAzureRmKey: 'vinodkey.tfstate'
+
+    - task: TerraformTask@5
+      displayName: "validate"
+      condition: eq('${{ parameters.run_validate }}', true)
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: $(MY_VAR_PATH)
+
+    - task: TerraformTask@5
+      displayName: "plan"
+      condition: eq('${{ parameters.run_plan }}', true)
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: $(MY_VAR_PATH)
+        environmentServiceNameAzureRM: 'connection_new'
+
+    - task: TerraformTask@5
+      displayName: "apply"
+      condition: eq('${{ parameters.run_apply }}', true)
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: $(MY_VAR_PATH)
+        commandOptions: '-auto-approve'
+        environmentServiceNameAzureRM: 'connection_new'
