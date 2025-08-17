@@ -1,0 +1,75 @@
+trigger:
+  - none
+
+parameters:
+  - name: run_init
+    displayName: 'Run Terraform init?'
+    type: boolean
+    default: false
+
+  - name: run_validate
+    displayName: 'Run Terraform validate?'
+    type: boolean
+    default: false
+
+  - name: run_plan
+    displayName: 'Run Terraform plan?'
+    type: boolean
+    default: false
+
+  - name: run_apply
+    displayName: 'Run Terraform apply?'
+    type: boolean
+    default: false
+
+pool: 
+  name: "agent5"
+
+variables:      # pipeline-level
+  MY_VAR_PATH: '$(System.DefaultWorkingDirectory)/infra'
+  
+
+steps:
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTask@5
+  displayName: "init"
+  condition: eq('${{ parameters.run_init }}', true)
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: $(MY_VAR_PATH)
+    commandOptions: '-upgrade'
+    backendServiceArm: 'connection_new'
+    backendAzureRmStorageAccountName: 'vinodmainstorage'
+    backendAzureRmContainerName: 'vinodconatiner'
+    backendAzureRmKey: 'vinodkey.tfstate'
+
+- task: TerraformTask@5
+  displayName: "validate"
+  condition: eq('${{ parameters.run_validate }}', true)
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+    workingDirectory: $(MY_VAR_PATH)
+
+- task: TerraformTask@5
+  displayName: "plan"
+  condition: eq('${{ parameters.run_plan }}', true)
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: $(MY_VAR_PATH)
+    environmentServiceNameAzureRM: 'connection_new'
+
+- task: TerraformTask@5
+  displayName: "apply"
+  condition: eq('${{ parameters.run_apply }}', true)
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: $(MY_VAR_PATH)
+    commandOptions: '-auto-approve'
+    environmentServiceNameAzureRM: 'connection_new'
