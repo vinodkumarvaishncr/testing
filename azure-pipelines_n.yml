@@ -1,6 +1,12 @@
 trigger:
   - none
 
+parameters:
+  - name: proceed
+    displayName: 'Do you want to run Terraform tasks (init, plan, apply)?'
+    type: boolean
+    default: false
+
 pool: 
   name: "agent5"
 
@@ -10,11 +16,13 @@ variables:      # pipeline-level
 
 steps:
 - task: TerraformInstaller@1
+  condition: eq('${{ parameters.proceed }}', true)
   inputs:
     terraformVersion: 'latest'
 
 - task: TerraformTask@5
   displayName: "init"
+  condition: eq('${{ parameters.proceed }}', true)
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -27,6 +35,7 @@ steps:
 
 - task: TerraformTask@5
   displayName: "validate"
+  condition: eq('${{ parameters.proceed }}', true)
   inputs:
     provider: 'azurerm'
     command: 'validate'
@@ -34,6 +43,7 @@ steps:
 
 - task: TerraformTask@5
   displayName: "plan"
+  condition: eq('${{ parameters.proceed }}', true)
   inputs:
     provider: 'azurerm'
     command: 'plan'
@@ -42,6 +52,7 @@ steps:
 
 - task: TerraformTask@5
   displayName: "apply"
+  condition: eq('${{ parameters.proceed }}', true)
   inputs:
     provider: 'azurerm'
     command: 'apply'
