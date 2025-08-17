@@ -3,9 +3,8 @@ trigger:
 
 pool: 
   name: "agent5"
- 
 
-stages:
+steps:
 - task: TerraformInstaller@1
   inputs:
     terraformVersion: 'latest'
