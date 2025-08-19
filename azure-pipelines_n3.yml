@@ -24,10 +24,32 @@ parameters:
 
 variables:
   MY_VAR_PATH: '$(System.DefaultWorkingDirectory)/infra'
-
+  
 jobs:
+# Step 1: Manual approval only if apply is selected
+- job: manual_approval
+  displayName: 'Manual Approval Before Apply'
+  condition: eq('${{ parameters.run_apply }}', true)
+  pool: server
+  steps:
+    - task: ManualValidation@0
+      inputs:
+        instructions: 'Terraform apply is selected. Please approve to proceed.'
+        onTimeout: 'reject'
+
+# Step 2: Terraform tasks
 - job: terraform_tasks
   displayName: 'Terraform Tasks'
+
+  ${{ if eq(parameters.run_apply, true) }}:
+    dependsOn: [manual_approval]
+
+  condition: |
+    or(
+      and(eq('${{ parameters.run_apply }}', true), succeeded('manual_approval')),
+      eq('${{ parameters.run_apply }}', false)
+    )
+
   pool:
     name: "agent5"
 
@@ -65,14 +87,6 @@ jobs:
         command: 'plan'
         workingDirectory: $(MY_VAR_PATH)
         environmentServiceNameAzureRM: 'connection_new'
-
-    # Manual approval only if apply is selected
-    - task: ManualValidation@0
-      displayName: 'Approval Before Apply'
-      condition: eq('${{ parameters.run_apply }}', true)
-      inputs:
-        instructions: 'Terraform apply is selected. Please approve to continue.'
-        onTimeout: 'reject'
 
     - task: TerraformTask@5
       displayName: "apply"
