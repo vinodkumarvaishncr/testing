@@ -1,0 +1,104 @@
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+variables:
+  var_path: '$(System.DefaultWorkingDirectory)/infra'
+jobs: 
+- job: "terraform_init_validate_plan"
+  displayName: "terrforn init validate plan"
+  pool: agent5
+  steps:
+     - task: TerraformInstaller@1
+       inputs:
+          terraformVersion: 'latest'
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'init'
+         workingDirectory: '$(var_path)'
+         backendServiceArm: 'connection_new'
+         backendAzureRmStorageAccountName: 'vinodmainstorage'
+         backendAzureRmContainerName: 'vinodconatiner'
+         backendAzureRmKey: 'vinodkey.tfstate'
+      
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'validate'
+         workingDirectory: '$(var_path)'
+    
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'plan'
+         workingDirectory: '$(var_path)'
+         environmentServiceNameAzureRM: 'connection_new'
+
+      
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'apply'
+         workingDirectory: '$(var_path)'
+         commandOptions: '-auto-approve'
+         environmentServiceNameAzureRM: 'connection_new'
+- job: "scan_tfsec"
+  displayName: "Scan tfsec"
+  pool: agent5
+  steps:
+  - task: tfsec@1
+    inputs:
+      version: 'v1.26.0'
+      dir: '$(System.DefaultWorkingDirectory)/infra'
+- job: "terrform_trivy"
+  displayName: "Scan trivy"
+  pool: agent5
+  steps:
+  - task: trivy@2
+    inputs:
+      version: 'latest'
+      type: 'filesystem'
+      target: '$(System.DefaultWorkingDirectory)/infra'
+      scanners: 'misconfig, secret, vuln'
+      severities: 'UNKNOWN, LOW, MEDIUM, HIGH, CRITICAL'
+- job: "scan_security"
+  displayName: "scan Microsoft Security DevOps"
+  pool: agent5
+  steps:
+  - task: MicrosoftSecurityDevOps@1
+    inputs:
+      command: 'run'
+- job: "terraform_manual_validation"
+  displayName: maual validation 
+  pool: server
+  steps:
+    - task: ManualValidation@1
+      inputs:
+        notifyUsers: 'vinodkumarvaishncr'
+        instructions: 'allow'
+- job: "terraform_apply"
+  displayName: terraform apply 
+  dependsOn: terraform_manual_validation 
+  pool: agent5
+  steps:
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+      backendServiceArm: 'connection_new'
+      backendAzureRmStorageAccountName: 'vinodmainstorage'
+      backendAzureRmContainerName: 'vinodconatiner'
+      backendAzureRmKey: 'vinodkey.tfstate'
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+      commandOptions: '-auto-approve'
+      environmentServiceNameAzureRM: 'connection_new'
+
+
+
