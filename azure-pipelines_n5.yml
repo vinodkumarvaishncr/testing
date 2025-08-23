@@ -44,4 +44,25 @@ jobs:
          workingDirectory: '$(var_path)'
          commandOptions: '-auto-approve'
          environmentServiceNameAzureRM: 'connection_new'
-      
+- job:
+  displayName: maual validation 
+  pool: server
+  steps:
+    - task: ManualValidation@1
+      inputs:
+        notifyUsers: 'vinodkumarvaishncr'
+        instructions: 'allow'
+- job: 
+  displayName: apply  
+  pool: agent5
+  steps:
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+      commandOptions: '-auto-approve'
+      environmentServiceNameAzureRM: 'connection_new'
+
+
+
