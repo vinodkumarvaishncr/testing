@@ -52,6 +52,17 @@ jobs:
     inputs:
       version: 'v1.26.0'
       dir: '$(System.DefaultWorkingDirectory)/infra'
+- job: "terrform_trivy"
+  displayName: "Scan trivy"
+  pool: agent5
+  steps:
+  - task: trivy@2
+    inputs:
+      version: 'latest'
+      type: 'filesystem'
+      target: '$(System.DefaultWorkingDirectory)/infra'
+      scanners: 'misconfig, secret, vuln'
+      severities: 'UNKNOWN, LOW, MEDIUM, HIGH, CRITICAL'
 - job: "terraform_manual_validation"
   displayName: maual validation 
   pool: server
