@@ -7,7 +7,7 @@ variables:
   var_path: '$(System.DefaultWorkingDirectory)/infra'
 jobs: 
 - job:
-  displayName: My First Job
+  displayName: infra creating
   pool: agent5
   steps:
      - task: TerraformInstaller@1
