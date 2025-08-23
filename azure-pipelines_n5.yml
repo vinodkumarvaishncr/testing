@@ -3,7 +3,8 @@ trigger:
     include:
       - main
       - feature/*
-
+variables:
+  var_path: '$(System.DefaultWorkingDirectory)/infra'
 jobs: 
 - job:
   displayName: My First Job
@@ -16,7 +17,7 @@ jobs:
        inputs:
          provider: 'azurerm'
          command: 'init'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+         workingDirectory: '$(var_path)'
          backendServiceArm: 'connection_new'
          backendAzureRmStorageAccountName: 'vinodmainstorage'
          backendAzureRmContainerName: 'vinodconatiner'
@@ -26,13 +27,13 @@ jobs:
        inputs:
          provider: 'azurerm'
          command: 'validate'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+         workingDirectory: '$(var_path)'
     
      - task: TerraformTask@5
        inputs:
          provider: 'azurerm'
          command: 'plan'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+         workingDirectory: '$(var_path)'
          environmentServiceNameAzureRM: 'connection_new'
 
       
@@ -40,7 +41,7 @@ jobs:
        inputs:
          provider: 'azurerm'
          command: 'apply'
-         workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+         workingDirectory: '$(var_path)'
          commandOptions: '-auto-approve'
          environmentServiceNameAzureRM: 'connection_new'
       
