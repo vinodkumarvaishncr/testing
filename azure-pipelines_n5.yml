@@ -6,7 +6,7 @@ trigger:
 variables:
   var_path: '$(System.DefaultWorkingDirectory)/infra'
 jobs: 
-- job:
+- job: "terraform_init_validate_plan"
   displayName: infra creating
   pool: agent5
   steps:
@@ -44,7 +44,15 @@ jobs:
          workingDirectory: '$(var_path)'
          commandOptions: '-auto-approve'
          environmentServiceNameAzureRM: 'connection_new'
-- job:
+- job: "scan_tfsec"
+  displayName: "terrafomr_scan_tfsec"
+  pool: agent5
+  steps:
+  - task: tfsec@1
+    inputs:
+      version: 'v1.26.0'
+      dir: '$(System.DefaultWorkingDirectory)/infra'
+- job: "terraform_manual_validation"
   displayName: maual validation 
   pool: server
   steps:
@@ -52,7 +60,7 @@ jobs:
       inputs:
         notifyUsers: 'vinodkumarvaishncr'
         instructions: 'allow'
-- job: 
+- job: "terraform_apply"
   displayName: apply  
   pool: agent5
   steps:
