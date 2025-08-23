@@ -61,7 +61,8 @@ jobs:
         notifyUsers: 'vinodkumarvaishncr'
         instructions: 'allow'
 - job: "terraform_apply"
-  displayName: apply  
+  displayName: apply 
+  dependsOn: terraform_manual_validation 
   pool: agent5
   steps:
   - task: TerraformTask@5
