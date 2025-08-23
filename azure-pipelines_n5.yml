@@ -21,7 +21,26 @@ jobs:
          backendAzureRmStorageAccountName: 'vinodmainstorage'
          backendAzureRmContainerName: 'vinodconatiner'
          backendAzureRmKey: 'vinodkey.tfstate'
+      
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'validate'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+    
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'plan'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+         environmentServiceNameAzureRM: 'connection_new'
 
-     
-         
+      
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'apply'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+         commandOptions: '-auto-approve'
+         environmentServiceNameAzureRM: 'connection_new'
       
