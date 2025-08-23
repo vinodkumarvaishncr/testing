@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+
+jobs: 
+- job:
+  displayName: My First Job
+  pool: agent5
+  steps:
+     - task: TerraformInstaller@1
+       inputs:
+          terraformVersion: 'latest'
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'init'
+         workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+         backendServiceArm: 'connection_new'
+         backendAzureRmStorageAccountName: 'vinodmainstorage'
+         backendAzureRmContainerName: 'vinodconatiner'
+         backendAzureRmKey: 'vinodkey.tfstate'
+
+     
+         
+      
