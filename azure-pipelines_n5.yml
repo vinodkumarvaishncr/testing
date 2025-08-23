@@ -61,6 +61,7 @@ jobs:
       provider: 'azurerm'
       command: 'init'
       workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+      backendServiceArm: 'connection_new'
       backendAzureRmStorageAccountName: 'vinodmainstorage'
       backendAzureRmContainerName: 'vinodconatiner'
       backendAzureRmKey: 'vinodkey.tfstate'
