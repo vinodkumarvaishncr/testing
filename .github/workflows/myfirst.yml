@@ -15,14 +15,17 @@ jobs:
     runs-on: vinodrunner
     steps:
         - name: Print a greeting
-          FIRST_NAME: vinod
-          MIDDLE_NAME: kumar
+          env:
+            FIRST_NAME: vinod
+            MIDDLE_NAME: kumar
           run:
-            echo Hello $MIDDLE_NAME " " $FIRST_NAME.
+            echo Hello $MIDDLE_NAME " " $FIRST_NAME
   my_second_job:
     name: My second job
+    runs-on: vinodrunner
     steps:
-      shell: powershell
-      run: 
-        echo ${env:PATH}
-        echo Hello kumar world!
+      - name: Print a greeting
+        shell: powershell
+        run: 
+          echo ${env:PATH}
+          echo Hello kumar world!
