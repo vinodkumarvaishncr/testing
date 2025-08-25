@@ -20,12 +20,4 @@ jobs:
             MIDDLE_NAME: kumar
           run:
             echo Hello $MIDDLE_NAME " " $FIRST_NAME
-  my_second_job:
-    name: My second job
-    runs-on: vinodrunner
-    steps:
-      - name: Print a greeting
-        shell: powershell
-        run: 
-          echo ${env:PATH}
-          echo Hello kumar world!
+
