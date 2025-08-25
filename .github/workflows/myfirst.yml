@@ -7,7 +7,7 @@ on:
     branches:
       - 'main'
       - 'features/**'
-  workflow_dispatch:
+  
 
 jobs:
   my_first_job:
