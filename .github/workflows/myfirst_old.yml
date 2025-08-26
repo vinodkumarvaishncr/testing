@@ -1,0 +1,23 @@
+# This is a basic workflow to help you get started with Actions
+
+name: vinod github action
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'features/**'
+  
+
+jobs:
+  my_first_job:
+    name: My first job
+    runs-on: vinodrunner
+    steps:
+        - name: Print a greeting
+          env:
+            FIRST_NAME: vinod
+            MIDDLE_NAME: kumar
+          run:
+            echo Hello $MIDDLE_NAME " " $FIRST_NAME
+
