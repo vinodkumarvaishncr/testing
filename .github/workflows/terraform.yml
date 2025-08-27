@@ -27,12 +27,22 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: testing/infra
-
+      working-directory: infra
+      
+    - name: Print current path
+      run: |
+        pwd
+        ls -la
+        
     - name: Terraform Plan
       run: terraform plan
-      working-directory: testing/infra
+      working-directory: infra
+
+    - name: Print current path
+      run: |
+        pwd
+        ls -la
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: testing/infra
+      working-directory: infra
