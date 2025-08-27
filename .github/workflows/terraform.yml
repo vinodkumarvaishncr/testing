@@ -40,7 +40,7 @@ jobs:
         ls
         
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -out=tfplan.out
       working-directory: infra
 
     - name: Print current path
@@ -49,5 +49,5 @@ jobs:
         ls
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve tfplan.out
       working-directory: infra
