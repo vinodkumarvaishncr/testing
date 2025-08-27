@@ -12,7 +12,7 @@ on:
 jobs:
   my_first_job:
     name: My first job
-    runs-on: vinodrunner
+    runs-on: self-hosted
     steps:
         - name: Print a greeting
           env:
