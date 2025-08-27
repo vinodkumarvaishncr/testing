@@ -15,6 +15,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Debug Current Path
+      run: |
+        Get-Location
+        Get-ChildItem
+
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:
@@ -32,7 +37,7 @@ jobs:
     - name: Print current path
       run: |
         pwd
-        ls -la
+        ls
         
     - name: Terraform Plan
       run: terraform plan
@@ -41,7 +46,7 @@ jobs:
     - name: Print current path
       run: |
         pwd
-        ls -la
+        ls
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
