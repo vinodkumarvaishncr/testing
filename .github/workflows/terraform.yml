@@ -51,5 +51,7 @@ jobs:
         ls
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve tfplan.out
+      run: |
+        terraform apply -auto-approve tfplan.out
+        terraform show -no-color tfplan.out
       working-directory: infra
