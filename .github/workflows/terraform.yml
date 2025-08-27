@@ -40,7 +40,9 @@ jobs:
         ls
         
     - name: Terraform Plan
-      run: terraform plan -out=tfplan.out
+      run: |
+        terraform plan -no-color -out=tfplan.out
+        terraform show -no-color tfplan.out
       working-directory: infra
 
     - name: Print current path
