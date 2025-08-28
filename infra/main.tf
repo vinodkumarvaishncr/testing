@@ -4,7 +4,4 @@ resource "azurerm_resource_group" "rg" {
   location = "West Europe"
 }
 
-resource "azurerm_resource_group" "rg2" {
-  name     = "rg-vinod22-testing"
-  location = "West Europe"
-}
+ 
