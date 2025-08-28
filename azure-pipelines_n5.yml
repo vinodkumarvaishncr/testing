@@ -1,7 +1,7 @@
 trigger: none
   #branches:
     #include:
-      #- main
+      ##- main
       #- feature/*
 variables:
   var_path: '$(System.DefaultWorkingDirectory)/infra'
