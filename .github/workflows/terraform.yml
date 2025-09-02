@@ -40,9 +40,7 @@ jobs:
         tenant-id: 6959824b-72a3-448d-9d04-fffb6db34d48
         # Azure subscriptionId
         subscription-id: 96a3eaff-d4cf-4222-9fe7-1622ab46f13e
-        permissions:
-          id-token: write
-          contents: read
+       
 
     - name: Login to Azure using credential
       uses: azure/login@v1
