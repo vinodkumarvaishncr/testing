@@ -5,7 +5,10 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+  
+permissions:
+  id-token: write
+  contents: read
 jobs:
   terraform:
     name: Terraform Init & Apply
