@@ -15,6 +15,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    
+        
+    
     - name: Debug Current Path
       run: |
         Get-Location
@@ -25,7 +28,17 @@ jobs:
       with:
         terraform_version: 1.7.5  # Use latest version or customize as needed
 
-    - name: Login to Azure
+    - name: Azure Login
+      uses: Azure/login@v2.3.0
+      with:
+        # ClientId of the Azure Service principal created.
+        client-id: 40e54066-731b-48f2-89ab-46a3a97f6e63
+        # TenantId of the Azure Service principal created.
+        tenant-id: 6959824b-72a3-448d-9d04-fffb6db34d48
+        # Azure subscriptionId
+        subscription-id: 96a3eaff-d4cf-4222-9fe7-1622ab46f13e
+
+    - name: Login to Azure using credential
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
