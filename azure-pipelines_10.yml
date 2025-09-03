@@ -3,41 +3,50 @@ trigger:
 
 pool: 
   name: "agent5"
+variables:
+  path: '$(System.DefaultWorkingDirectory)/infra'
 
 jobs:
 - job: "terraform_install"
   displayName: "terraform install"
   steps:
   - task: TerraformInstaller@1
+    displayName: "terraform installer"
     inputs:
       terraformVersion: 'latest'
   - task: TerraformTask@5
+    displayName: "terraform init"
     inputs:
       provider: 'azurerm'
       command: 'init'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+      workingDirectory: $(path)
       backendServiceArm: 'connection_new'
       backendAzureRmStorageAccountName: 'vinodmainstorage'
       backendAzureRmContainerName: 'vinodconatiner'
       backendAzureRmKey: 'new.tfstate'
 
   - task: TerraformTask@5
+    displayName: "terraform validate"
     inputs:
       provider: 'azurerm'
       command: 'validate'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+      workingDirectory: $(path)
 
   - task: TerraformTask@5
+    displayName: "terraform plan"
     inputs:
       provider: 'azurerm'
       command: 'plan'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+      workingDirectory: $(path)
       environmentServiceNameAzureRM: 'connection_new'
+
+
   - task: TerraformTask@5
+    displayName: "terraform apply"
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+      workingDirectory: $(path)
       environmentServiceNameAzureRM: 'connection_new'
 
  
