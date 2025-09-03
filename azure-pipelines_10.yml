@@ -14,39 +14,47 @@ jobs:
     displayName: "terraform installer"
     inputs:
       terraformVersion: 'latest'
-  - task: TerraformTask@5
-    displayName: "terraform init"
-    inputs:
-      provider: 'azurerm'
-      command: 'init'
-      workingDirectory: $(path)
-      backendServiceArm: 'connection_new'
-      backendAzureRmStorageAccountName: 'vinodmainstorage'
-      backendAzureRmContainerName: 'vinodconatiner'
-      backendAzureRmKey: 'new.tfstate'
+- job: "terraform_init"
+  displayName: "terraform init"
+  steps:
+   - task: TerraformTask@5
+     inputs:
+       provider: 'azurerm'
+       command: 'init'
+       workingDirectory:  $(path)
+       backendServiceArm: 'connection_new'
+       backendAzureRmStorageAccountName: 'vinodmainstorage'
+       backendAzureRmContainerName: 'vinodconatiner'
+       backendAzureRmKey: 'new.tfstate'
+- job: "terraform_validate" 
+  displayName: "terraform validate"
+  steps:
+    - task: TerraformTask@5
+      displayName: "terraform validate"
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: $(path)
 
-  - task: TerraformTask@5
-    displayName: "terraform validate"
-    inputs:
-      provider: 'azurerm'
-      command: 'validate'
-      workingDirectory: $(path)
-
-  - task: TerraformTask@5
-    displayName: "terraform plan"
-    inputs:
-      provider: 'azurerm'
-      command: 'plan'
-      workingDirectory: $(path)
-      environmentServiceNameAzureRM: 'connection_new'
-
-
-  - task: TerraformTask@5
-    displayName: "terraform apply"
-    inputs:
-      provider: 'azurerm'
-      command: 'apply'
-      workingDirectory: $(path)
-      environmentServiceNameAzureRM: 'connection_new'
+- job: "terrform_plan"
+  displayName: "terraform plan"
+  steps:
+    - task: TerraformTask@5
+      displayName: "terraform plan"
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: $(path)
+        environmentServiceNameAzureRM: 'connection_new'
+- job: "terraform_apply"
+  displayName: "terraform apply"
+  steps:
+    - task: TerraformTask@5
+      displayName: "terraform apply"
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: $(path)
+        environmentServiceNameAzureRM: 'connection_new'
 
  
