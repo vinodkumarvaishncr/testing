@@ -26,6 +26,7 @@ jobs:
    
 - job: "terraform_validate" 
   displayName: "terraform validate"
+  dependsOn: terraform_install
   steps:
     - task: TerraformInstaller@1
       displayName: "Install Terraform"
@@ -38,8 +39,9 @@ jobs:
         command: 'validate'
         workingDirectory: $(path)
 
-- job: "terrform_plan"
+- job: "terraform_plan"
   displayName: "terraform plan"
+  dependsOn: terraform_validate
   steps:
     - task: TerraformInstaller@1
       displayName: "Install Terraform"
@@ -54,9 +56,11 @@ jobs:
         environmentServiceNameAzureRM: 'connection_new'
 - job: "terraform_apply"
   displayName: "terraform apply"
+  dependsOn: terraform_plan
   steps:
     - task: TerraformInstaller@1
       displayName: "Install Terraform"
+      
       inputs:
         terraformVersion: 'latest'
     - task: TerraformTask@5
