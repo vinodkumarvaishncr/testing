@@ -14,6 +14,8 @@ jobs:
     displayName: "terraform installer"
     inputs:
       terraformVersion: 'latest'
+     
+
 - job: "terraform_init"
   displayName: "terraform init"
   steps:
