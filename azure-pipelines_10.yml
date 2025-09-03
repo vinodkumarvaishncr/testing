@@ -27,6 +27,10 @@ jobs:
 - job: "terraform_validate" 
   displayName: "terraform validate"
   steps:
+    - task: TerraformInstaller@1
+      displayName: "Install Terraform"
+      inputs:
+        terraformVersion: 'latest'
     - task: TerraformTask@5
       displayName: "terraform validate"
       inputs:
@@ -37,6 +41,10 @@ jobs:
 - job: "terrform_plan"
   displayName: "terraform plan"
   steps:
+    - task: TerraformInstaller@1
+      displayName: "Install Terraform"
+      inputs:
+        terraformVersion: 'latest'
     - task: TerraformTask@5
       displayName: "terraform plan"
       inputs:
@@ -47,6 +55,10 @@ jobs:
 - job: "terraform_apply"
   displayName: "terraform apply"
   steps:
+    - task: TerraformInstaller@1
+      displayName: "Install Terraform"
+      inputs:
+        terraformVersion: 'latest'
     - task: TerraformTask@5
       displayName: "terraform apply"
       inputs:
