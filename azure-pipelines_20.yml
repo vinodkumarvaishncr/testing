@@ -9,6 +9,7 @@ variables:
 jobs:
 - job: "terraform_install"
   displayName: "terraform install"
+  pool: "agent5"
   steps:
   - task: TerraformInstaller@1
     displayName: "terraform installer"
@@ -26,6 +27,7 @@ jobs:
    
 - job: "terraform_validate" 
   displayName: "terraform validate"
+  pool: "agent5"
   dependsOn: terraform_install
   steps:
     - task: TerraformInstaller@1
@@ -51,6 +53,7 @@ jobs:
 
 - job: "terraform_plan"
   displayName: "terraform plan"
+  pool: "agent5"
   dependsOn: terraform_validate
   steps:
     - task: TerraformInstaller@1
@@ -74,9 +77,21 @@ jobs:
         command: 'plan'
         workingDirectory: $(path)
         environmentServiceNameAzureRM: 'connection_new'
+
+- job: "manual_validation"
+  displayName: "manual validation"
+  dependsOn: terraform_plan
+  pool: server
+  steps:
+  - task: ManualValidation@1
+    inputs:
+      notifyUsers: 'vinodkumarvaishncr@gmail.com'
+      instructions: 'vinodkumarvaishncr@gmail.com'
+
 - job: "terraform_apply"
   displayName: "terraform apply"
-  dependsOn: terraform_plan
+  pool: "agent5"
+  dependsOn: manual_validation
   steps:
     - task: TerraformInstaller@1
       displayName: "Install Terraform"
