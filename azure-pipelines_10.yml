@@ -14,20 +14,16 @@ jobs:
     displayName: "terraform installer"
     inputs:
       terraformVersion: 'latest'
-     
-
-- job: "terraform_init"
-  displayName: "terraform init"
-  steps:
-   - task: TerraformTask@5
-     inputs:
-       provider: 'azurerm'
-       command: 'init'
-       workingDirectory:  $(path)
-       backendServiceArm: 'connection_new'
-       backendAzureRmStorageAccountName: 'vinodmainstorage'
-       backendAzureRmContainerName: 'vinodconatiner'
-       backendAzureRmKey: 'new.tfstate'
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      workingDirectory: '$(path)'
+      backendServiceArm: 'connection_new'
+      backendAzureRmStorageAccountName: 'vinodmainstorage'
+      backendAzureRmContainerName: 'vinodconatiner'
+      backendAzureRmKey: 'new.tfstate'
+   
 - job: "terraform_validate" 
   displayName: "terraform validate"
   steps:
