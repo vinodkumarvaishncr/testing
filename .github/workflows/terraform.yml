@@ -48,6 +48,10 @@ jobs:
         terraform show -no-color tfplan.out
       working-directory: infra
 
+    - name: Terraform Show (Readable)
+      run: terraform show -no-color tfplan.out
+      working-directory: infra
+
 
     - name: Terraform Apply
       run: |
