@@ -18,20 +18,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    
-        
-    
-    - name: Debug Current Path
-      run: |
-        Get-Location
-        Get-ChildItem
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: 1.7.5  # Use latest version or customize as needed
-
-    - name: Azure Login
+    - name: Azure Login  (OIDC)
       uses: Azure/login@v2.3.0
       with:
         # ClientId of the Azure Service principal created.
@@ -40,21 +28,19 @@ jobs:
         tenant-id: 6959824b-72a3-448d-9d04-fffb6db34d48
         # Azure subscriptionId
         subscription-id: 96a3eaff-d4cf-4222-9fe7-1622ab46f13e
-       
-
-    - name: Login to Azure using credential
-      uses: azure/login@v1
+          
+    - name: Show Azure Account Info
+      run: az account show
+      
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        terraform_version: 1.7.5
 
     - name: Terraform Init
       run: terraform init
       working-directory: infra
       
-    - name: Print current path
-      run: |
-        pwd
-        ls
         
     - name: Terraform Plan
       run: |
@@ -62,10 +48,6 @@ jobs:
         terraform show -no-color tfplan.out
       working-directory: infra
 
-    - name: Print current path
-      run: |
-        pwd
-        ls
 
     - name: Terraform Apply
       run: |
