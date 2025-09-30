@@ -44,22 +44,22 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: infra
+      working-directory: .
       
         
     - name: Terraform Plan
       run: |
         terraform plan -no-color -out=tfplan.out
         terraform show -no-color tfplan.out
-      working-directory: infra
+      working-directory: .
 
     - name: Terraform Show (Readable)
       run: terraform show -no-color tfplan.out
-      working-directory: infra
+      working-directory: .
 
 
     - name: Terraform Apply
       run: |
         terraform apply -auto-approve tfplan.out
         terraform show -no-color tfplan.out
-      working-directory: infra
+      working-directory: .
