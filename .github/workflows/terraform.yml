@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'infra/**'
   workflow_dispatch:
   
 permissions:
@@ -23,11 +25,11 @@ jobs:
       uses: Azure/login@v2.3.0
       with:
         # ClientId of the Azure Service principal created.
-        client-id: 40e54066-731b-48f2-89ab-46a3a97f6e63
+        client-id: 53079823-d8aa-4985-91f2-988dea424d31
         # TenantId of the Azure Service principal created.
-        tenant-id: 6959824b-72a3-448d-9d04-fffb6db34d48
+        tenant-id: ee2f7139-4072-4385-99fc-82bd6f563aa6
         # Azure subscriptionId
-        subscription-id: 96a3eaff-d4cf-4222-9fe7-1622ab46f13e
+        subscription-id: 98b7163f-e961-4b65-98c2-7a6dc2edf5b7
           
     - name: Show Azure Account Info
       run: az account show
