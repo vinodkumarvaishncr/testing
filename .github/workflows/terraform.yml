@@ -19,7 +19,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
+    
 
     - name: Azure Login  (OIDC)
       uses: Azure/login@v2.3.0
@@ -30,7 +30,13 @@ jobs:
         tenant-id: ee2f7139-4072-4385-99fc-82bd6f563aa6
         # Azure subscriptionId
         subscription-id: 98b7163f-e961-4b65-98c2-7a6dc2edf5b7
-          
+        
+    - name: Dump GitHub OIDC token (for debug only)
+      run: |
+        echo "Requesting token..."
+        curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+             "$ACTIONS_ID_TOKEN_REQUEST_URL"
+             
     - name: Show Azure Account Info
       run: az account show
       
