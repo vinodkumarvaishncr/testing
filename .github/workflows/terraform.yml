@@ -30,8 +30,11 @@ jobs:
         tenant-id: ee2f7139-4072-4385-99fc-82bd6f563aa6
         # Azure subscriptionId
         subscription-id: 98b7163f-e961-4b65-98c2-7a6dc2edf5b7
+        allow-no-subscriptions: true  # Optional, useful in some cases
         
-            
+    - name: Print GitHub OIDC token subject
+      run: echo "${{ github.repository }}:ref:refs/heads/${{ github.ref_name }}"
+        
     - name: Show Azure Account Info
       run: az account show
       
