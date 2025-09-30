@@ -31,12 +31,7 @@ jobs:
         # Azure subscriptionId
         subscription-id: 98b7163f-e961-4b65-98c2-7a6dc2edf5b7
         
-    - name: Dump GitHub OIDC token (for debug only)
-      run: |
-        echo "Requesting token..."
-        curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-             "$ACTIONS_ID_TOKEN_REQUEST_URL"
-             
+            
     - name: Show Azure Account Info
       run: az account show
       
