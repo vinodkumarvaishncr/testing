@@ -37,21 +37,21 @@ jobs:
 
       # Step 4: Terraform Init
       - name: Terraform Init
-        working-directory: .
+        working-directory: ./infra
         run: terraform init
 
       # Step 5: Terraform Validate
       - name: Terraform Validate
-        working-directory: .
+        working-directory: ./infra
         run: terraform validate
 
       # Step 6: Terraform Plan
       - name: Terraform Plan
-        working-directory: .
+        working-directory: ./infra
         run: terraform plan
 
       # Step 7: Terraform Apply (only for main branch)
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        working-directory: .
+        working-directory: ./infra
         run: terraform apply -auto-approve
