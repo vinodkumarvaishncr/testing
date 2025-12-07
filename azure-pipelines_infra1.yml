@@ -29,6 +29,7 @@ stages:
             command: 'validate'
 
   -  stage: "stage2_plan"
+     dependsOn: "Stage1_download_init_validate"
      jobs:
      - job: "infra_plan"
        displayName: "infra plan"   
@@ -45,6 +46,7 @@ stages:
        
 
   - stage: "stage3_apply"
+    dependsOn: "stage2_plan"
     jobs:
       - job: "terrafomr_apply"
         displayName: "apply"
