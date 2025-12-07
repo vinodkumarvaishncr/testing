@@ -15,6 +15,7 @@ stages:
             terraformVersion: 'latest'
       - job: infra_init
         displayName: "init"
+        dependsOn: "infra_install"
         steps:
         - task: TerraformTask@5
           inputs:
@@ -27,6 +28,7 @@ stages:
 
       - job: "infra_validate"
         displayName: "validate"
+        dependsOn: "infra_init"
         steps:
         - task: TerraformTask@5
           inputs:
@@ -35,6 +37,7 @@ stages:
 
       -  job: "infra_plan"
          displayName: "plan"
+         dependsOn: "infra_validate"
          steps:
          - task: TerraformTask@5
            inputs:
@@ -44,6 +47,7 @@ stages:
 
       -  job: "infra_apply"
          displayName:  "apply"
+         dependsOn: "infra_plan"
          steps:
          - task: TerraformTask@5
            inputs:
