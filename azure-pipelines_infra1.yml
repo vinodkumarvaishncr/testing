@@ -13,10 +13,7 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
-      - job: infra_init
-        displayName: "init"
-        dependsOn: "infra_install"
-        steps:
+       
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
@@ -26,32 +23,18 @@ stages:
             backendAzureRmContainerName: 'container22'
             backendAzureRmKey: 'vinodkey2.tfstate'
 
-      - job: "infra_validate"
-        displayName: "validate"
-        dependsOn: "infra_init"
-        steps:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'validate'
-
-      -  job: "infra_plan"
-         displayName: "plan"
-         dependsOn: "infra_validate"
-         steps:
-         - task: TerraformTask@5
-           inputs:
-             provider: 'azurerm'
-             command: 'plan'
-             environmentServiceNameAzureRM: 'infra_conn'
-
-      -  job: "infra_apply"
-         displayName:  "apply"
-         dependsOn: "infra_plan"
-         steps:
-         - task: TerraformTask@5
-           inputs:
-             provider: 'azurerm'
-             command: 'apply'
-             commandOptions: '-auto-approve'
-             environmentServiceNameAzureRM: 'infra_conn'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            environmentServiceNameAzureRM: 'infra_conn'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            commandOptions: '-auto-approve'
+            environmentServiceNameAzureRM: 'infra_conn'
