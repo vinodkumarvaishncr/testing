@@ -20,6 +20,10 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
+            backendServiceArm: 'infra_conn'
+            backendAzureRmStorageAccountName: 'vinodstoragemain'
+            backendAzureRmContainerName: 'container22'
+            backendAzureRmKey: 'vinodkey2.tfstate'
 
       - job: "infra_validate"
         displayName: "validate"
@@ -36,6 +40,7 @@ stages:
            inputs:
              provider: 'azurerm'
              command: 'plan'
+             environmentServiceNameAzureRM: 'infra_conn'
 
       -  job: "infra_apply"
          displayName:  "apply"
@@ -45,3 +50,4 @@ stages:
              provider: 'azurerm'
              command: 'apply'
              commandOptions: '-auto-approve'
+             environmentServiceNameAzureRM: 'infra_conn'
