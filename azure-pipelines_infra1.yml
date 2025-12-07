@@ -40,6 +40,14 @@ stages:
        - task: TerraformTask@5
          inputs:
            provider: 'azurerm'
+           command: 'init'
+           backendServiceArm: 'infra_conn'
+           backendAzureRmStorageAccountName: 'vinodstoragemain'
+           backendAzureRmContainerName: 'container22'
+           backendAzureRmKey: 'vinodkey.tfstate'
+       - task: TerraformTask@5
+         inputs:
+           provider: 'azurerm'
            command: 'plan'
            environmentServiceNameAzureRM: 'infra_conn'
          
