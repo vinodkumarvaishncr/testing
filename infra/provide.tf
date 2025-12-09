@@ -8,7 +8,7 @@ terraform {
  
  backend "azurerm" {
       resource_group_name  = "vinod_main_rg"
-      storage_account_name = "vinodstoragemain"
+      storage_account_name = "vinodstoragemaina"
       container_name       = "container22"
       key                  = "vinodkey.tfstate"
   }
@@ -17,7 +17,7 @@ terraform {
 
 # Configure the Microsoft Azure Provider444rty322 
 provider "azurerm" {
-  subscription_id = "95a90f4b-7e15-47ba-95ab-0d52bac078e4"
+  subscription_id = "98473d5b-c639-404e-9bf2-91559fe65ff8"
   features {}
   
 }
