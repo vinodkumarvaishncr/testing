@@ -3,6 +3,9 @@ trigger:
 
 pool: 
   name: "agent1_pool"
+
+variables:
+- group: global_variable   # contains INFRACOST_API_KEY secret variable
  
 stages:
   - stage: "Stage1_download_init_validate"
@@ -73,11 +76,12 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              # Export API key from pipeline variable
-              $env:INFRACOST_API_KEY = "$(INFRACOST_API_KEY)"
-                            
-              # Run Infracost
-              infracost breakdown --path=.
+              Write-Host "Setting API key"
+               $env:INFRACOST_API_KEY = "$(INFRACOST_API_KEY)"
+              
+              Write-Host "API key loaded? ->" $env:INFRACOST_API_KEY
+              
+               infracost breakdown --path=.
             workingDirectory: '$(System.DefaultWorkingDirectory)'
 
 
