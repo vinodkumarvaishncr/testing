@@ -67,7 +67,6 @@ stages:
               # Write your tflint commands here.
               
               tflint --recursive
-            workingDirectory: '$(System.DefaultWorkingDirectory)'
          
   - stage: "infraCost"
     dependsOn: "stage2_plan"
@@ -100,26 +99,4 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)'
 
 
-  - stage: "stage3_apply"
-    dependsOn: "stage2_plan"
-    jobs:
-      - job: "terrafomr_apply"
-        displayName: "apply"
-        steps:
-        - task: TerraformInstaller@1
-          inputs:
-            terraformVersion: 'latest' 
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            backendServiceArm: 'infra_conn'
-            backendAzureRmStorageAccountName: 'vinodstoragemaina'
-            backendAzureRmContainerName: 'container22'
-            backendAzureRmKey: 'vinodkey.tfstate'
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'apply'
-            commandOptions: '-auto-approve'
-            environmentServiceNameAzureRM: 'infra_conn'
+ 
