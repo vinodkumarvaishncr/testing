@@ -51,24 +51,10 @@ stages:
            command: 'plan'
            environmentServiceNameAzureRM: 'infra_conn'
          
-  -  stage: "infraCosting"
-     dependsOn: "stage2_plan" 
-     jobs:
-       - job: "costing"
-         displayName: "costtt"
-         steps:
-         - task: TerraformInstaller@1
-           inputs:
-             terraformVersion: 'latest'
-          
-         - task: PowerShell@2
-           inputs:
-             targetType: 'inline'
-             script: 'infracost breakdown --path=.'
-             workingDirectory: '$(System.DefaultWorkingDirectory)'
+
 
   - stage: "stage3_apply"
-    dependsOn: "infraCosting"
+    dependsOn: "stage2_plan"
     jobs:
       - job: "terrafomr_apply"
         displayName: "apply"
