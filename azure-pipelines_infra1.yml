@@ -61,14 +61,7 @@ stages:
         steps:
         - task: TerraformInstaller@1
           inputs:
-            terraformVersion: 'latest'
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            backendAzureRmStorageAccountName: 'vinodstoragemaina'
-            backendAzureRmContainerName: 'container22'
-            backendAzureRmKey: 'vinodkey.tfstate'
+            terraformVersion: 'latest' 
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
