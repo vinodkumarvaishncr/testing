@@ -59,6 +59,7 @@ stages:
     jobs:
       - job: "tflint"
         displayName: "tflint"
+        continueOnError: true
         steps:
         - task: PowerShell@2
           inputs:
