@@ -20,15 +20,16 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
-
-        - template: .azure-pipelines/templates/terraform-init.yml
-          parameters:
-            workingDirectory: $(filepath)
-            backendServiceArm: infra_conn
-            storageAccountName: vinodstoragemaina
-            containerName: container22
-            stateFileKey: $(state_file_name)
        
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: $(filepath)
+            backendServiceArm: 'infra_conn'
+            backendAzureRmStorageAccountName: 'vinodstoragemaina'
+            backendAzureRmContainerName: 'container22'
+            backendAzureRmKey: $(state_file_name)
 
         - task: TerraformTask@5
           inputs:
@@ -45,15 +46,15 @@ stages:
        - task: TerraformInstaller@1
          inputs:
            terraformVersion: 'latest'
-       
-       - template: .azure-pipelines/templates/terraform-init.yml
-         parameters:
-            workingDirectory: $(filepath)
-            backendServiceArm: infra_conn
-            storageAccountName: vinodstoragemaina
-            containerName: container22
-            stateFileKey: $(state_file_name)
-
+       - task: TerraformTask@5
+         inputs:
+           provider: 'azurerm'
+           command: 'init'
+           workingDirectory: $(filepath)
+           backendServiceArm: 'infra_conn'
+           backendAzureRmStorageAccountName: 'vinodstoragemaina'
+           backendAzureRmContainerName: 'container22'
+           backendAzureRmKey: $(state_file_name)
        - task: TerraformTask@5
          inputs:
            provider: 'azurerm'
@@ -145,15 +146,15 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest' 
-        
-        - template: .azure-pipelines/templates/terraform-init.yml
-          parameters:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
             workingDirectory: $(filepath)
-            backendServiceArm: infra_conn
-            storageAccountName: vinodstoragemaina
-            containerName: container22
-            stateFileKey: $(state_file_name)
-
+            backendServiceArm: 'infra_conn'
+            backendAzureRmStorageAccountName: 'vinodstoragemaina'
+            backendAzureRmContainerName: 'container22'
+            backendAzureRmKey: $(state_file_name)
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'

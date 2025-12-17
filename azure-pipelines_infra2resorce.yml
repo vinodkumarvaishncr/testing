@@ -6,11 +6,7 @@ pool:
 
 variables:
 - group: global_variable   # contains INFRACOST_API_KEY secret variable
-- name: state_file_name
-  value: vinodkey2.tfstate
-- name: filepath
-  value: $(System.DefaultWorkingDirectory)/infra
-
+ 
 stages:
   - stage: "Stage1_download_init_validate"
     jobs:
@@ -20,21 +16,20 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
-
-        - template: .azure-pipelines/templates/terraform-init.yml
-          parameters:
-            workingDirectory: $(filepath)
-            backendServiceArm: infra_conn
-            storageAccountName: vinodstoragemaina
-            containerName: container22
-            stateFileKey: $(state_file_name)
        
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'infra_conn'
+            backendAzureRmStorageAccountName: 'vinodstoragemaina'
+            backendAzureRmContainerName: 'container22'
+            backendAzureRmKey: 'vinodkey2.tfstate'
 
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: $(filepath)
 
   -  stage: "stage2_plan"
      dependsOn: "Stage1_download_init_validate"
@@ -45,24 +40,22 @@ stages:
        - task: TerraformInstaller@1
          inputs:
            terraformVersion: 'latest'
-       
-       - template: .azure-pipelines/templates/terraform-init.yml
-         parameters:
-            workingDirectory: $(filepath)
-            backendServiceArm: infra_conn
-            storageAccountName: vinodstoragemaina
-            containerName: container22
-            stateFileKey: $(state_file_name)
-
+       - task: TerraformTask@5
+         inputs:
+           provider: 'azurerm'
+           command: 'init'
+           backendServiceArm: 'infra_conn'
+           backendAzureRmStorageAccountName: 'vinodstoragemaina'
+           backendAzureRmContainerName: 'container22'
+           backendAzureRmKey: 'vinodkey.tfstate'
        - task: TerraformTask@5
          inputs:
            provider: 'azurerm'
            command: 'plan'
-           workingDirectory: $(filepath)
            environmentServiceNameAzureRM: 'infra_conn'
 
-  - stage: "security_tool_tflint"
-    dependsOn: "Stage1_download_init_validate"
+  - stage: "tflint_comm"
+    dependsOn: "stage2_plan"
     jobs:
       - job: "tflint"
         displayName: "tflint"
@@ -73,11 +66,11 @@ stages:
             targetType: 'inline'
             script: |
               # Write your tflint commands here.
-              cd infra
+              
               tflint --recursive
 
-  - stage: "security_tool_tfsec"
-    dependsOn: "Stage1_download_init_validate"
+  - stage: "tfsec"
+    dependsOn: "stage2_plan"
     jobs:
       - job: "tfsecccc"
         displayName: "tfsec"
@@ -88,11 +81,11 @@ stages:
             targetType: 'inline'
             script: |
               # Write your  tfsec commands here.
-              cd infra
+              
               tfsec
 
-  - stage: "security_tool_trivy"
-    dependsOn: "Stage1_download_init_validate"
+  - stage: "trivy"
+    dependsOn: "stage2_plan"
     jobs:
       - job: "trivy"
         displayName: "trivy scan"
@@ -102,11 +95,11 @@ stages:
             targetType: 'inline'
             script: |
               # Write your trivy commands here.
-              cd infra
+              
               trivy config .
          
   - stage: "infraCost"
-    dependsOn: "Stage1_download_init_validate"
+    dependsOn: "stage2_plan"
     jobs:
       - job: "cost_infra"
         displayName: "costtt"
@@ -118,11 +111,10 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: $(filepath)
             backendServiceArm: 'infra_conn'
             backendAzureRmStorageAccountName: 'vinodstoragemaina'
             backendAzureRmContainerName: 'container22'
-            backendAzureRmKey: $(state_file_name)
+            backendAzureRmKey: 'vinodkey.tfstate'
         
         - task: PowerShell@2
           inputs:
@@ -134,7 +126,7 @@ stages:
               Write-Host "API key loaded? ->" $env:INFRACOST_API_KEY
               
                infracost breakdown --path=.
-            workingDirectory: $(filepath)
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
 
   - stage: "stage3_apply"
     dependsOn: "stage2_plan"
@@ -145,20 +137,18 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest' 
-        
-        - template: .azure-pipelines/templates/terraform-init.yml
-          parameters:
-            workingDirectory: $(filepath)
-            backendServiceArm: infra_conn
-            storageAccountName: vinodstoragemaina
-            containerName: container22
-            stateFileKey: $(state_file_name)
-
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'infra_conn'
+            backendAzureRmStorageAccountName: 'vinodstoragemaina'
+            backendAzureRmContainerName: 'container22'
+            backendAzureRmKey: 'vinodkey.tfstate'
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'apply'
-            workingDirectory: $(filepath)
             commandOptions: '-auto-approve'
             environmentServiceNameAzureRM: 'infra_conn'
  
