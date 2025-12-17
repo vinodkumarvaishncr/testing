@@ -63,7 +63,7 @@ stages:
            environmentServiceNameAzureRM: 'infra_conn'
 
   - stage: "security_tool_tflint"
-    dependsOn: "stage2_plan"
+    dependsOn: "Stage1_download_init_validate"
     jobs:
       - job: "tflint"
         displayName: "tflint"
@@ -78,7 +78,7 @@ stages:
               tflint --recursive
 
   - stage: "security_tool_tfsec"
-    dependsOn: "stage2_plan"
+    dependsOn: "Stage1_download_init_validate"
     jobs:
       - job: "tfsecccc"
         displayName: "tfsec"
@@ -93,7 +93,7 @@ stages:
               tfsec
 
   - stage: "security_tool_trivy"
-    dependsOn: "stage2_plan"
+    dependsOn: "Stage1_download_init_validate"
     jobs:
       - job: "trivy"
         displayName: "trivy scan"
@@ -107,7 +107,7 @@ stages:
               trivy config .
          
   - stage: "infraCost"
-    dependsOn: "stage2_plan"
+    dependsOn: "Stage1_download_init_validate"
     jobs:
       - job: "cost_infra"
         displayName: "costtt"
