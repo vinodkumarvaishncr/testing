@@ -10,7 +10,7 @@ terraform {
       resource_group_name  = "vinod_main_rg"
       storage_account_name = "vinodstoragemaina"
       container_name       = "container22"
-      key                  = "vinodkey.tfstate"
+      key                  = "vinodkeytesting.tfstate"
   }
 
 }
