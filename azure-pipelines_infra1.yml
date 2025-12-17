@@ -21,6 +21,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
             backendServiceArm: 'infra_conn'
             backendAzureRmStorageAccountName: 'vinodstoragemaina'
             backendAzureRmContainerName: 'container22'
@@ -44,6 +45,7 @@ stages:
          inputs:
            provider: 'azurerm'
            command: 'init'
+           workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
            backendServiceArm: 'infra_conn'
            backendAzureRmStorageAccountName: 'vinodstoragemaina'
            backendAzureRmContainerName: 'container22'
@@ -111,6 +113,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
             backendServiceArm: 'infra_conn'
             backendAzureRmStorageAccountName: 'vinodstoragemaina'
             backendAzureRmContainerName: 'container22'
@@ -141,6 +144,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
             backendServiceArm: 'infra_conn'
             backendAzureRmStorageAccountName: 'vinodstoragemaina'
             backendAzureRmContainerName: 'container22'
@@ -149,6 +153,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
             commandOptions: '-auto-approve'
             environmentServiceNameAzureRM: 'infra_conn'
  
