@@ -61,7 +61,8 @@ stages:
            workingDirectory: $(filepath)
            environmentServiceNameAzureRM: 'infra_conn'
 
-  - stage: "security_tool_tflint"
+  - stage: "Security_Tools"
+    displayName: "Security & Compliance Checks"
     dependsOn: "Stage1_download_init_validate"
     jobs:
       - job: "tflint"
@@ -76,9 +77,7 @@ stages:
               cd infra
               tflint --recursive
 
-  - stage: "security_tool_tfsec"
-    dependsOn: "Stage1_download_init_validate"
-    jobs:
+     
       - job: "tfsecccc"
         displayName: "tfsec"
         continueOnError: true
@@ -91,9 +90,7 @@ stages:
               cd infra
               tfsec
 
-  - stage: "security_tool_trivy"
-    dependsOn: "Stage1_download_init_validate"
-    jobs:
+     
       - job: "trivy"
         displayName: "trivy scan"
         steps:
@@ -137,7 +134,9 @@ stages:
             workingDirectory: $(filepath)
 
   - stage: "stage3_apply"
-    dependsOn: "stage2_plan"
+    dependsOn:  
+      - stage2_plan
+      - Security_Tools
     jobs:
       - job: "terrafomr_apply"
         displayName: "apply"
