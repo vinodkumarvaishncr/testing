@@ -6,7 +6,11 @@ pool:
 
 variables:
 - group: global_variable   # contains INFRACOST_API_KEY secret variable
- 
+- name: "state_file_name"
+  value: 'vinodkey2.tfstate'
+- name: "filepath"
+  value: '$(System.DefaultWorkingDirectory)/infra'
+
 stages:
   - stage: "Stage1_download_init_validate"
     jobs:
@@ -21,17 +25,17 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+            workingDirectory: '${filepath}'
             backendServiceArm: 'infra_conn'
             backendAzureRmStorageAccountName: 'vinodstoragemaina'
             backendAzureRmContainerName: 'container22'
-            backendAzureRmKey: 'vinodkey2.tfstate'
+            backendAzureRmKey: ${state_file_name}
 
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+            workingDirectory: '${filepath}'
 
   -  stage: "stage2_plan"
      dependsOn: "Stage1_download_init_validate"
@@ -46,19 +50,19 @@ stages:
          inputs:
            provider: 'azurerm'
            command: 'init'
-           workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+           workingDirectory: '${filepath}'
            backendServiceArm: 'infra_conn'
            backendAzureRmStorageAccountName: 'vinodstoragemaina'
            backendAzureRmContainerName: 'container22'
-           backendAzureRmKey: 'vinodkey.tfstate'
+           backendAzureRmKey: ${state_file_name}
        - task: TerraformTask@5
          inputs:
            provider: 'azurerm'
            command: 'plan'
-           workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+           workingDirectory: '${filepath}'
            environmentServiceNameAzureRM: 'infra_conn'
 
-  - stage: "tflint_comm"
+  - stage: "security_tool_tflint"
     dependsOn: "stage2_plan"
     jobs:
       - job: "tflint"
@@ -73,7 +77,7 @@ stages:
               cd infra
               tflint --recursive
 
-  - stage: "tfsec"
+  - stage: "security_tool_tfsec"
     dependsOn: "stage2_plan"
     jobs:
       - job: "tfsecccc"
@@ -88,7 +92,7 @@ stages:
               cd infra
               tfsec
 
-  - stage: "trivy"
+  - stage: "security_tool_trivy"
     dependsOn: "stage2_plan"
     jobs:
       - job: "trivy"
@@ -115,11 +119,11 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+            workingDirectory: '${filepath}'
             backendServiceArm: 'infra_conn'
             backendAzureRmStorageAccountName: 'vinodstoragemaina'
             backendAzureRmContainerName: 'container22'
-            backendAzureRmKey: 'vinodkey.tfstate'
+            backendAzureRmKey: ${state_file_name}
         
         - task: PowerShell@2
           inputs:
@@ -131,7 +135,7 @@ stages:
               Write-Host "API key loaded? ->" $env:INFRACOST_API_KEY
               
                infracost breakdown --path=.
-            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+            workingDirectory: '${filepath}'
 
   - stage: "stage3_apply"
     dependsOn: "stage2_plan"
@@ -146,16 +150,16 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+            workingDirectory: '${filepath}'
             backendServiceArm: 'infra_conn'
             backendAzureRmStorageAccountName: 'vinodstoragemaina'
             backendAzureRmContainerName: 'container22'
-            backendAzureRmKey: 'vinodkey.tfstate'
+            backendAzureRmKey: ${state_file_name}
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'apply'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
+            workingDirectory: '${filepath}'
             commandOptions: '-auto-approve'
             environmentServiceNameAzureRM: 'infra_conn'
  
