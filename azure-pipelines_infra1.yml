@@ -21,7 +21,7 @@ stages:
           inputs:
             terraformVersion: 'latest'
 
-        - template: .azure-pipelines/templates/terraform-init.yml
+        - template: templates/terraform-init.yml
           parameters:
             workingDirectory: $(filepath)
             backendServiceArm: infra_conn
@@ -46,7 +46,7 @@ stages:
          inputs:
            terraformVersion: 'latest'
        
-       - template: .azure-pipelines/templates/terraform-init.yml
+       - template: templates/terraform-init.yml
          parameters:
             workingDirectory: $(filepath)
             backendServiceArm: infra_conn
@@ -146,7 +146,7 @@ stages:
           inputs:
             terraformVersion: 'latest' 
         
-        - template: .azure-pipelines/templates/terraform-init.yml
+        - template: templates/terraform-init.yml
           parameters:
             workingDirectory: $(filepath)
             backendServiceArm: infra_conn
