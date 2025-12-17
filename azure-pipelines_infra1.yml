@@ -31,6 +31,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
 
   -  stage: "stage2_plan"
      dependsOn: "Stage1_download_init_validate"
@@ -54,6 +55,7 @@ stages:
          inputs:
            provider: 'azurerm'
            command: 'plan'
+           workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
            environmentServiceNameAzureRM: 'infra_conn'
 
   - stage: "tflint_comm"
@@ -68,7 +70,7 @@ stages:
             targetType: 'inline'
             script: |
               # Write your tflint commands here.
-              
+              cd infra
               tflint --recursive
 
   - stage: "tfsec"
@@ -83,7 +85,7 @@ stages:
             targetType: 'inline'
             script: |
               # Write your  tfsec commands here.
-              
+              cd infra
               tfsec
 
   - stage: "trivy"
@@ -97,7 +99,7 @@ stages:
             targetType: 'inline'
             script: |
               # Write your trivy commands here.
-              
+              cd infra
               trivy config .
          
   - stage: "infraCost"
@@ -129,7 +131,7 @@ stages:
               Write-Host "API key loaded? ->" $env:INFRACOST_API_KEY
               
                infracost breakdown --path=.
-            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/infra'
 
   - stage: "stage3_apply"
     dependsOn: "stage2_plan"
